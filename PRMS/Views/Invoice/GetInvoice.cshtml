@@ -1,0 +1,83 @@
+﻿<div class="row">
+        <div class="col-md-12">
+            <div class="tile">
+                <div class="tile-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="tile">
+                                <section class="invoice">
+                                    <div class="row mb-4">
+                                        <div class="col-6">
+                                            <h2 class="page-header"><i class="fa fa-globe"></i> @ViewBag.Company.CompanyName</h2>
+                                        </div>
+                                        <div class="col-6">
+                                            <h5 class="text-right">Date: @ViewBag.Invoice.InvoiceDate.ToString(" dd MMM yyyy")</h5>
+                                        </div>
+                                    </div>
+                                    <div class="row invoice-info">
+                                        <div class="col-4">
+                                            From
+                                            <address>
+                                                <strong>@ViewBag.Company.CompanyName</strong><br>
+                                                @ViewBag.Company.Mobile<br>
+                                                @ViewBag.Company.Email<br>
+                                                @ViewBag.Company.Address
+                                            </address>
+                                        </div>
+                                        <div class="col-4">
+                                            To
+                                            <address>
+                                                <strong>@ViewBag.Invoice.CustomerInfo.FirstName @ViewBag.Invoice.CustomerInfo.LastName</strong><br>
+                                                @ViewBag.Invoice.CustomerInfo.Contact1, @ViewBag.Invoice.CustomerInfo.Contact2<br>
+                                                @ViewBag.Invoice.CustomerInfo.Email<br>
+                                                @ViewBag.Invoice.CustomerInfo.PresentAddress
+                                            </address>
+                                        </div>
+                                        <div class="col-4">
+                                            <b>Invoice No: @ViewBag.Invoice.InvoiceNo</b><br />
+                                            Total Amount: @ViewBag.Invoice.TotalAmount
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12 table-responsive">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>#SL</th>
+                                                        <th>Item</th>
+                                                        <th>Paid Month Year</th>
+                                                        <th>Collection Type</th>
+                                                        <th>Paid Amount</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @{ 
+                                                        int j = 0;
+                                                    }
+                                                    @foreach (var i in ViewBag.InvoiceDetails)
+                                                    {
+                                                        j++;
+                                                        <tr>
+                                                            <td>@j</td>
+                                                            <td>@i.InventoryItem.ItemName</td>
+                                                            <td>@i.PaidMonthYear</td>
+                                                            <td>@i.CollectionType</td>
+                                                            <td>@i.PaidAmount</td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="row d-print-none mt-2">
+                                        <div class="col-12 text-right"><a class="btn btn-primary" href="javascript:window.print();" target="_blank"><i class="fa fa-print"></i> Print</a></div>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+

@@ -1,0 +1,69 @@
+﻿@model IEnumerable<PRMS.Models.Invoice>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="tile">
+            <div class="tile-body">
+                <p>
+                    <a asp-action="Create" class="btn btn-primary btn-sm pull-right">Create New</a>
+                </p>
+                <table class="table table-hover table-bordered table-responsive-lg" id="sampleTable">
+                    <thead>
+                        <tr>
+                            <td>
+                                Invoice No
+                            </td>
+                            <th>
+                                Client Name
+                            </th>
+                            <th>
+                                Invoice Date
+                            </th>
+                            <th>
+                                Total Amount
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            long id = @item.InvoiceId;
+                        <tr>
+                            <td>
+                                <a asp-action="GetInvoice" asp-route-id="@id">@Html.DisplayFor(modelItem => item.InvoiceNo)</a>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CustomerInfo.FirstName)
+                                @Html.DisplayFor(modelItem => item.CustomerInfo.LastName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.InvoiceDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TotalAmount)
+                            </td>
+                            <td>
+                                @Html.ActionLink("", "Edit", new { id = id }, new { @class = "btn btn-warning fa fa-pencil-square-o" })
+                                @Html.ActionLink("", "Delete", new { id = id }, new { @class = "btn btn-danger fa fa-trash", onclick = "return confirm('Are you sure you wants to delete this?');" })
+
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#sampleTable').DataTable();
+    });
+</script>
+

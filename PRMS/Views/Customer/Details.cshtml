@@ -1,0 +1,158 @@
+﻿@model PRMS.Models.CustomerInfo
+
+@{
+    ViewData["Title"] = "Details";
+}
+<div class="row">
+        <div class="col-md-12">
+            <div class="tile">
+                <div class="tile-body">
+                    <h2>Details</h2>
+
+                    <div>
+                        <h4>CustomerInfo</h4>
+                        <hr />
+                        <dl class="dl-horizontal">
+                            <dt>
+                                @Html.DisplayNameFor(model => model.FirstName)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.FirstName)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.LastName)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.LastName)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.FatherName)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.FatherName)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.MotherName)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.MotherName)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.SpouseName)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.SpouseName)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.PresentAddress)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.PresentAddress)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.PermanentAddress)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.PermanentAddress)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.NID)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.NID)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.BirthId)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.BirthId)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.DateOfBirth)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.DateOfBirth)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Contact1)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Contact1)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Contact2)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Contact2)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Email)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Email)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.CustomerImage)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.CustomerImage)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.CreatedBy)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.CreatedBy)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.CreatedDate)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.CreatedDate)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.UpdatedBy)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.UpdatedBy)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.UpdatedDate)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.UpdatedDate)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.UserIp)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.UserIp)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Status)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Status)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.IsRemove)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.IsRemove)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.CompanyId)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.CompanyId)
+                            </dd>
+                        </dl>
+                    </div>
+                    <div>
+                        <a asp-action="Edit" class="btn btn-warning btn-sm" asp-route-id="@Model.CustomerId">Edit</a> |
+                        <a asp-action="Index" class="btn btn-primary btn-sm">Back to List</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+

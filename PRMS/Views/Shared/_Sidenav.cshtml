@@ -1,0 +1,72 @@
+﻿@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<div class="app-sidebar__overlay" data-toggle="sidebar"></div>
+<aside class="app-sidebar">
+    <div class="app-sidebar__user">
+        <img class="app-sidebar__user-avatar" src="~/Images/demouser.png" height="50px" width="50px" alt="User Image" />
+        <div>
+            @if (SignInManager.IsSignedIn(User))
+            {
+                <p class="app-sidebar__user-name">@UserManager.GetUserName(User)</p>
+                <p class="app-sidebar__user-designation">
+                    @{
+                        if (User.IsInRole("Admin"))
+                        {
+                            @Html.DisplayName("Admin")
+                        }
+                        else if (User.IsInRole("Superadmin"))
+                        {
+                            @Html.DisplayName("Superadmin")
+                        }
+                        else if (User.IsInRole("Manager"))
+                        {
+                            @Html.DisplayName("Manager")
+                        }
+                        else if (User.IsInRole("Staff"))
+                        {
+                            @Html.DisplayName("Staff")
+                        }
+                    }
+                </p>
+            }
+        </div>
+    </div>
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <ul class="app-menu">
+            <li><a class="app-menu__item" asp-area="" asp-controller="Home" asp-action="Index"><i class="app-menu__icon fa fa-dashboard"></i><span class="app-menu__label">Dashboard</span></a></li>
+            <li><a class="app-menu__item" asp-area="" asp-controller="Expance" asp-action="Index"><i class="app-menu__icon fa fa-dashboard"></i><span class="app-menu__label">Expance</span></a></li>
+            <li><a class="app-menu__item" asp-area="" asp-controller="Invoice" asp-action="Index"><i class="app-menu__icon fa fa-dashboard"></i><span class="app-menu__label">Collection</span></a></li>
+            <li class="treeview">
+                <a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-laptop"></i><span class="app-menu__label">Client</span><i class="treeview-indicator fa fa-angle-right"></i></a>
+                <ul class="treeview-menu">
+                    <li><a class="app-menu__item" asp-area="" asp-controller="Customer" asp-action="Index"><i class="app-menu__icon fa fa-dashboard"></i><span class="app-menu__label">Customer</span></a></li>
+                    <li><a class="app-menu__item" asp-area="" asp-controller="CustomerDocument" asp-action="Index"><i class="app-menu__icon fa fa-dashboard"></i><span class="app-menu__label">Customer Document</span></a></li>
+                    <li><a class="app-menu__item" asp-area="" asp-controller="Aggrement" asp-action="Index"><i class="app-menu__icon fa fa-dashboard"></i><span class="app-menu__label">Aggrement</span></a></li>
+
+                </ul>
+            </li>
+            <li class="treeview">
+                <a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-laptop"></i><span class="app-menu__label">Setup</span><i class="treeview-indicator fa fa-angle-right"></i></a>
+                <ul class="treeview-menu">
+                    <li><a class="app-menu__item" asp-area="" asp-controller="InventoryItems" asp-action="Index"><i class="app-menu__icon fa fa-dashboard"></i><span class="app-menu__label">Item</span></a></li>
+                    <li><a class="app-menu__item" asp-area="" asp-controller="Categorie" asp-action="Index"><i class="app-menu__icon fa fa-dashboard"></i><span class="app-menu__label">Category</span></a></li>
+                    <li><a class="app-menu__item" asp-area="" asp-controller="Company" asp-action="Index"><i class="app-menu__icon fa fa-dashboard"></i><span class="app-menu__label">Company</span></a></li>
+                </ul>
+            </li>
+            <li class="treeview">
+                <a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-cogs"></i><span class="app-menu__label">Settings</span><i class="treeview-indicator fa fa-angle-right"></i></a>
+                @if (!User.IsInRole("Manager") && !User.IsInRole("Staff"))
+                {
+                    <ul class="treeview-menu">
+                        <li><a class="treeview-item" asp-area="Identity" asp-page="/Account/Register"><i class="icon fa fa-bank"></i>New User</a></li>
+                    </ul>
+                }
+            </li>
+        </ul>
+    }
+
+</aside>

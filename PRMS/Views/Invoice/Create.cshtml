@@ -1,0 +1,327 @@
+﻿@*@model PRMS.Models.Invoice*@
+@model IEnumerable<PRMS.Models.InvoiceDetails>
+@{
+    ViewBag.Title = "Collection";
+}
+@*https://www.aspsnippets.com/Articles/Insert-Save-Multiple-rows-records-to-database-using-Entity-Framework-in-ASPNet-MVC.aspx*@
+<div class="row">
+    <div class="col-md-12">
+        <div class="tile">
+            <div class="tile-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label class="control-label">Invoice Date (mm/dd/yyyy)</label>
+                        <input id="InvoiceDate" class="form-control" type="date" />
+
+                        <label class="control-label">Customer</label>
+                        <select id="CustomerId" class="form-control" asp-items="ViewBag.CustomerId">
+                            <option value="0">-- Select Customer --</option>
+                        </select>
+                    </div>
+                </div>
+                <br />
+                <table id="tblCustomers" class="table table-bordered" cellpadding="0" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Inventory Item</th>
+                            <th class="d-none">Item Id</th>
+                            <th>Paid Month Year</th>
+                            <th>Collection Type</th>
+                            <th>Monthly Amount</th>
+                            <th>Paid Amount</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (InvoiceDetails details in Model)
+                        {
+                        <tr>
+                            <td>@details.ItemId</td>
+                            <td class="d-none">Item Id</td>
+                            <td>@details.PaidMonthYear</td>
+                            <td>@details.CollectionType</td>
+                            <td>@details.Invoice.TotalAmount</td>
+                            <td>@details.PaidAmount</td>
+                            <td><input type="button" value="Remove" onclick="Remove(this)" /></td>
+                        </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td>
+                                <select id="ddlItem" class="form-control">
+                                    <option value="0">-- Select Item --</option>
+                                </select>
+                            </td>
+                            <td class="d-none"><input type="number" id="txtItemId" class="form-control" /></td>
+                            <td><input type="date" id="txtPaidMonthYear" class="form-control" /></td>
+                            <td>
+                                <select id="ddlCollectionType" class="form-control input-group-sm">
+                                    <option value="0">-- Select Type --</option>
+                                    <option selected="selected" value="Cash">Cash</option>
+                                    <option value="Bank">Bank</option>
+                                    <option value="MobileBanking">Mobile Banking</option>
+                                    <option value="Others">Others</option>
+                                </select>
+                            </td>
+                            <td><input type="number" id="txtMonthlyRentAmount" class="form-control" readonly /></td>
+                            <td><input type="number" id="txtPaidAmount" class="form-control" /></td>
+                            <td>
+                                <button class="btn btn-primary" id="btnAdd">P</button>
+                            </td>
+                        </tr>
+                    </tfoot>
+                    <tfoot>
+                        <tr>
+                            <td class="d-none"></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <th class="text-right">Total Amount</th>
+                            <td><input type="number" id="txtInvoiceTotal" class="form-control" readonly value="0"/></td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
+                <div class="row">
+                    <div class="col-md-12">
+                        
+                        <input type="button" class="btn btn-success pull-right" id="btnSave" value="Save" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    $('#demoNotify').click(function () {
+        $.notify({
+            title: "Update Complete : ",
+            message: "Something cool is just updated!",
+            icon: 'fa fa-check' }, {
+                type: "danger"
+            });
+    });
+
+    //Default HTML 5 Date Picker Clear
+    $('input[type="date"]').attr('type', 'text');
+
+    $('#InvoiceDate').datepicker({
+        format: "mm/dd/yyyy",
+        autoclose: true,
+        todayHighlight: true
+    }).datepicker("setDate", 'now');
+
+    $("#txtPaidMonthYear").datepicker({
+        format: "mm-yyyy",
+        autoclose: true,
+        startView: "year",
+        minViewMode: "months"
+    });
+
+    $('#CollectionType,#CustomerId,#ItemId').select2();
+
+     //Binding Product Item
+    $(document).ready(function () {
+        $('#CustomerId').change(function () {
+            $("#tblCustomers > TBODY").empty();
+            $("#txtInvoiceTotal").val('0');
+            var url = '@Url.Content("~/")' + "Invoice/GetItemByCustomerId";
+            var ddlsource = "#CustomerId";
+            $.getJSON(url, { id: $(ddlsource).val() }, function (data) {
+                var items = '';
+                $('#ddlItem').empty();
+                $.each(data, function (i, item) {
+                    items += "<option value='" + item.value + "'>" + item.text + "</option>";
+                });
+                $('#ddlItem').html(items);
+                });
+            });
+    });
+
+     //Bind Monthly Total Amount
+    $(document).ready(function () {
+        $('#ddlItem').change(function () {
+            var url = '@Url.Content("~/")' + "Invoice/GetAmountDetailsByItemId";
+            var ddlsource = "#ddlItem";
+            $.getJSON(url, { id: $(ddlsource).val() }, function (data) {
+                $("#txtMonthlyRentAmount").val(data);
+            });
+        });
+    });
+
+    $("body").on("click", "#btnAdd", function () {
+        
+        //Reference the Name and Country TextBoxes.
+        var ddlItem = $("#ddlItem");
+        var txtPaidMonthYear = $("#txtPaidMonthYear");
+        var ddlCollectionType = $("#ddlCollectionType");
+        var txtMonthlyRentAmount = $("#txtMonthlyRentAmount");
+        var txtPaidAmount = $("#txtPaidAmount");
+        var txtInvoiceTotal = $("#txtInvoiceTotal");
+
+        txtInvoiceTotal = parseFloat(txtInvoiceTotal.val()) + parseFloat(txtPaidAmount.val());
+
+        document.getElementById("txtInvoiceTotal").value = txtInvoiceTotal;
+
+        if (ddlItem.val() == 0) {
+            $.notify({
+                title: "Warning : ",
+                message: "Please select Item!",
+                icon: 'fa fa-check' }, { type: "warning" });
+            return;
+        } else if (txtPaidMonthYear.val() == '') {
+            $.notify({
+                title: "Warning : ",
+                message: "Please select Month and Year!",
+                icon: 'fa fa-check' }, { type: "warning" });
+            return;
+        } else if (ddlCollectionType.val() == 0) {
+            $.notify({
+                title: "Warning : ",
+                message: "Please select Collection Type!",
+                icon: 'fa fa-check' }, { type: "warning" });
+            return;
+        } else if (txtPaidAmount.val() == '') {
+            $.notify({
+                title: "Warning : ",
+                message: "Please Enter Amount!",
+                icon: 'fa fa-check' }, { type: "warning" });
+            return;
+        }
+
+        //Get the reference of the Table's TBODY element.
+        var tBody = $("#tblCustomers > TBODY")[0];
+
+        //Add Row.
+        var row = tBody.insertRow(-1);
+
+        //Add Item Name cell. 0
+        var cell = $(row.insertCell(-1));
+        cell.html($("#ddlItem option:selected").text());
+
+        //Add Item Id cell. 1 and Hide this id
+        var cell = $(row.insertCell(-1));
+        cell.addClass('d-none');
+        cell.html(ddlItem.val());
+
+        //Add Paid Month Year cell. 2
+        cell = $(row.insertCell(-1));
+        cell.html(txtPaidMonthYear.val());
+
+        //Add Collection Type cell. 3
+        cell = $(row.insertCell(-1));
+        cell.html(ddlCollectionType.val());
+
+        //Add Monthly Rent Amount cell. 4
+        cell = $(row.insertCell(-1));
+        cell.html(txtMonthlyRentAmount.val());
+
+        //Add Paid Amount cell. 5
+        cell = $(row.insertCell(-1));
+        cell.html(txtPaidAmount.val());
+
+        //Add Button cell.
+        cell = $(row.insertCell(-1));
+        var btnRemove = $("<input />");
+        btnRemove.attr("type", "button");
+        btnRemove.attr("onclick", "Remove(this);");
+        btnRemove.addClass("btn btn-danger fa fa-times");
+        btnRemove.val('R');
+        cell.append(btnRemove);
+
+        //Clear the TextBoxes.
+        ddlItem.val(0);
+        txtPaidMonthYear.val("");
+        txtPaidAmount.val("");
+        txtMonthlyRentAmount.val("");
+    });
+
+    function Remove(button) {
+        //Determine the reference of the Row using the Button.
+        var row = $(button).closest("TR");
+        var name = $("TD", row).eq(0).html();
+
+        var paidAmount = $("TD", row).eq(5).html();
+        console.log(paidAmount);
+        var txtInvoiceTotal = $("#txtInvoiceTotal");
+
+        txtInvoiceTotal = parseFloat(txtInvoiceTotal.val()) - parseFloat(paidAmount);
+        document.getElementById("txtInvoiceTotal").value = txtInvoiceTotal;
+
+        if (confirm("Do you want to delete: " + name)) {
+            //Get the reference of the Table.
+            var table = $("#tblCustomers")[0];
+            //Delete the Table row using it's Index.
+            table.deleteRow(row[0].rowIndex);
+        }
+    };
+
+    $("body").on("click", "#btnSave", function () {
+        //Loop through the Table rows and build a JSON array.
+        var invoice = {};
+        invoice.InvoiceDate = $("#InvoiceDate").val();
+        invoice.CustomerId = $("#CustomerId").val();
+        invoice.TotalAmount = $("#txtInvoiceTotal").val();
+
+        var invoiceDetails = new Array();
+        $("#tblCustomers TBODY TR").each(function () {
+            var row = $(this);
+            var singleInvoice = {};
+            singleInvoice.ItemId = row.find("TD").eq(1).html();
+            singleInvoice.PaidMonthYear = row.find("TD").eq(2).html();
+            singleInvoice.CollectionType = row.find("TD").eq(3).html();
+            singleInvoice.PaidAmount = row.find("TD").eq(5).html();
+            invoiceDetails.push(singleInvoice);
+        });
+        invoice.InvoiceDetails = invoiceDetails;
+
+        if (invoice.CustomerId == 0) {
+            $.notify({
+                title: "Warning : ",
+                message: "Please Select Customer Name!",
+                icon: 'fa fa-check'
+            }, { type: "warning" });
+            return;
+        } else if (invoice.InvoiceDate == '') {
+            $.notify({
+                title: "Warning : ",
+                message: "Please Select Invoice date!",
+                icon: 'fa fa-check'
+            }, { type: "warning" });
+            return;
+        } else if (invoice.InvoiceDetails == '') {
+            $.notify({
+                title: "Warning : ",
+                message: "Please Enter Invoice Details!",
+                icon: 'fa fa-check'
+            }, { type: "warning" });
+            return;
+        }
+        console.log(JSON.stringify(invoice));
+        //Send the JSON array to Controller using AJAX.
+        $.ajax({
+            type: "POST",
+            url: "/Invoice/Save",
+            data: JSON.stringify(invoice),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                console.log("Date Save!!!");
+                if (result.status === "success") {
+                    $.notify({
+                        title: "Success : ",
+                        message: "Data Save Success!",
+                        icon: 'fa fa-check'
+                    }, { type: "success" });
+                    setTimeout(function () {
+                        window.location.href = "@Url.Content("~/Invoice/GetInvoice")" + "?id=" + result.id;
+                    }, 1000);
+                }
+            }
+        });
+    });
+
+</script>

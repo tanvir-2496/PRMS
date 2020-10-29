@@ -1,0 +1,64 @@
+﻿@model PRMS.Models.CustomerDocument
+
+@{
+    ViewData["Title"] = "Edit";
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="tile">
+            <div class="tile-body">
+                <h2>Edit</h2>
+
+                <h4>Edit Customer Document</h4>
+                <div class="row">
+                    <div class="col-md-4">
+                        <form asp-action="Edit" enctype="multipart/form-data" method="post">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <input type="hidden" asp-for="CustomerDocumentId" />
+                            <input type="hidden" asp-for="CreatedBy" />
+                            <input type="hidden" asp-for="CreatedDate" />
+                            <input type="hidden" asp-for="UserIp" />
+                            <div class="form-group">
+                                <div class="row">
+                                    <label asp-for="CustomerId" class="control-label">Customer</label>
+                                    <select asp-for="CustomerId" class="form-control form-control-sm" asp-items="ViewBag.CustomerId"> <option>-- Select Category --</option></select>
+                                </div>
+                                <div class="row">
+                                    <label asp-for="DocumentUrl" class="control-label">Document Url</label>
+                                    <input type="file" asp-for="DocumentUrl" class="form-control form-control-sm" />
+                                    <span asp-validation-for="DocumentUrl" class="text-danger"></span>
+                                </div>
+                                <div class="row">
+                                    <label asp-for="Remarks" class="control-label">Remarks</label>
+                                    <textarea type="text" asp-for="Remarks" class="form-control form-control-sm" style="height: 30px;"></textarea>
+                                    <span asp-validation-for="Remarks" class="text-danger"></span>
+                                </div>
+                                <div class="row">
+                                    <label asp-for="ReferanceId" class="control-label">Referance Id</label>
+                                    <input asp-for="ReferanceId" class="form-control form-control-sm" />
+                                    <span asp-validation-for="ReferanceId" class="text-danger"></span>
+                                </div>
+                                <div class="row">
+                                    <label asp-for="Referance" class="control-label">Referance</label>
+                                    <textarea type="text" asp-for="Referance" class="form-control form-control-sm" style="height: 30px;"></textarea>
+                                    <span asp-validation-for="Referance" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="padding-top: 15px;">
+                                <a asp-action="Index" class="btn btn-primary btn-sm">Back to List</a>
+
+                                <input type="submit" value="Update" class="btn btn-success pull-right btn-sm" />
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+

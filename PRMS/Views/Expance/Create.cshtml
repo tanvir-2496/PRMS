@@ -1,0 +1,145 @@
+﻿@model PRMS.Models.Expance
+
+@{
+    ViewData["Title"] = "Create";
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="tile">
+            <div class="tile-body">
+                <h4>Add Expance</h4>
+                <hr />
+                <div class="row">
+                    <div class="col-md-4 col-sm-12 col-xs-12">
+                        <form asp-action="Create">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="ExpanceDate" class="control-label">Expance Date</label>
+                                <input asp-for="ExpanceDate" class="form-control" type="date" />
+                                <span asp-validation-for="ExpanceDate" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="ExpanceType" class="control-label">Expance Type</label>
+                                <select asp-for="ExpanceType" class="form-control">
+                                    <option value="" selected="selected">-- Select Type --</option>
+                                    <option value="Customer">Customer</option>
+                                    <option value="House">House</option>
+                                    <option value="Shop">Shop</option>
+                                    <option value="Month">Month</option>
+                                    <option value="Others">Others</option>
+                                </select>
+                                <span asp-validation-for="ExpanceType" class="text-danger"></span>
+                            </div>
+                            <div class="form-group" id="customerView">
+                                <label asp-for="CustomerId" class="control-label">Customer</label>
+                                <select asp-for="CustomerId" class="form-control"></select>
+                                <span asp-validation-for="CustomerId" class="text-danger"></span>
+                            </div>
+                            <div class="form-group" id="ItemView">
+                                <label asp-for="InventoryItemId" class="control-label">Inventory Item</label>
+                                <select asp-for="InventoryItemId" class="form-control">Inventory Item</select>
+                                <span asp-validation-for="InventoryItemId" class="text-danger"></span>
+                            </div>
+                            <div class="form-group" id="MonthYearView">
+                                <label asp-for="MonthYear" class="control-label">Month Year</label>
+                                <input asp-for="MonthYear" class="form-control" />
+                                <span asp-validation-for="MonthYear" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Amount" class="control-label">Amount</label>
+                                <input asp-for="Amount" class="form-control" type="number" />
+                                <span asp-validation-for="Amount" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Remarks" class="control-label"></label>
+                                <textarea asp-for="Remarks" class="form-control"></textarea>
+                                <span asp-validation-for="Remarks" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" value="Create" class="btn btn-primary" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div>
+                    <a asp-action="Index">Back to List</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    //Default HTML 5 Date Picker Clear
+    $('input[type="date"]').attr('type', 'text');
+
+    $('#ExpanceDate').datepicker({
+        format: "mm/dd/yyyy",
+        autoclose: true,
+        todayHighlight: true
+    }).datepicker("setDate", 'now');
+
+    $("#MonthYear").datepicker({
+        format: "mm-yyyy",
+        autoclose: true,
+        startView: "year",
+        minViewMode: "months"
+    });
+
+    $('#ExpanceType,#CustomerId,#InventoryItemId').select2();
+
+    $('#customerView').hide();
+    $('#ItemView').hide();
+    $('#MonthYearView').hide();
+    
+     $(document).ready(function () {
+        var customers = "<option value='0'>-- Select Customer -- </option>";
+        $('#CustomerId').html(items);
+    });
+
+    $(document).ready(function () {
+        var InventoryItems = "<option value='0'>-- Select Item -- </option>";
+        $('#ItemView').html(items);
+    });
+
+    //Binding Product Item
+    $(document).ready(function () {
+        $('#ExpanceType').change(function () {
+            //Dropdown hide and Empty
+            $('#InventoryItemId').empty();
+            $('#CustomerId').empty();
+            $('#MonthYear').val('');
+            $('#ItemView').hide();
+            $('#customerView').hide();
+            $('#MonthYearView').hide();
+
+            var url = '@Url.Content("~/")' + "Expance/GetExpenceTypeByType";
+            var ddlsource = "#ExpanceType";
+            //console.log($(ddlsource).val());
+            $.getJSON(url, { type: $(ddlsource).val() }, function (data) {
+                if ($(ddlsource).val() == "Customer") {
+                    var customers = '';
+                    $('#CustomerId').empty();
+                    $('#customerView').show();
+                    $.each(data, function (i, item) {
+                        customers += "<option value='" + item.value + "'>" + item.text + "</option>";
+                    });
+                    $('#CustomerId').html(customers);
+                } else if ($(ddlsource).val() == "House" || $(ddlsource).val() == "Shop") {
+                    var InventoryItems = '';
+                    $('#InventoryItemId').empty();
+                    $('#ItemView').show();
+                    $.each(data, function (i, item) {
+                        InventoryItems += "<option value='" + item.value + "'>" + item.text + "</option>";
+                    });
+                    $('#InventoryItemId').html(InventoryItems);
+                } else if ($(ddlsource).val() == "Month") {
+                    $('#MonthYearView').show();
+                }
+              });
+            });
+    });
+      
+</script>

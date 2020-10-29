@@ -1,0 +1,39 @@
+﻿@model PRMS.Models.InventoryCategory
+
+@{
+    ViewData["Title"] = "Create";
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="tile">
+            <div class="tile-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4>Add New Category</h4>
+                        <hr />
+                        <form asp-action="Create" enctype="multipart/form-data" method="post">
+                            <div class="form-group">
+                                <label asp-for="CategoryName" class="control-label col-md-2">Category name</label>
+                                <div class="col-md-4">
+                                    <input asp-for="CategoryName" class="form-control form-control-sm" />
+                                    <span asp-validation-for="CategoryName" class="text-danger"></span>
+                                </div>
+
+
+                                <label asp-for="ImageUrl" class="control-label col-md-2">Image</label>
+                                <div class="col-md-4">
+                                    <input type="file" asp-for="ImageUrl" class="form-control form-control-sm" />
+                                    <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <a asp-action="Index" class="btn btn-primary btn-sm">Back to List</a>
+                                <input type="submit" value="Create" class="btn btn-success pull-right btn-sm" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

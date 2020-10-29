@@ -1,0 +1,62 @@
+﻿@model PRMS.Models.Aggrement
+
+@{
+    ViewData["Title"] = "Create";
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="tile">
+            <div class="tile-body">
+                <h4>Add New Aggrement</h4>
+                <hr />
+                <div class="row">
+                    <div class="col-md-4">
+                        <form asp-action="Create">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <label asp-for="AggrementDate" class="control-label">Aggrement Date</label>
+                                    <input asp-for="AggrementDate" class="form-control" />
+                                    <span asp-validation-for="AggrementDate" class="text-danger"></span>
+                                </div>
+                                <div class="row">
+                                    <label asp-for="AggrementStartDate" class="control-label">Aggrement Start Date</label>
+                                    <input asp-for="AggrementStartDate" class="form-control" />
+                                    <span asp-validation-for="AggrementStartDate" class="text-danger"></span>
+                                </div>
+                                <div class="row">
+                                    <label asp-for="AggrementEndDate" class="control-label">Aggrement End Date</label>
+                                    <input asp-for="AggrementEndDate" class="form-control" />
+                                    <span asp-validation-for="AggrementEndDate" class="text-danger"></span>
+                                </div>
+                                <div class="row">
+                                    <label asp-for="AggrementAmount" class="control-label">Aggrement Amount</label>
+                                    <input asp-for="AggrementAmount" class="form-control" />
+                                    <span asp-validation-for="AggrementAmount" class="text-danger"></span>
+                                </div>
+                                <div class="row">
+                                    <label asp-for="MonthlyRent" class="control-label">Monthly Rent</label>
+                                    <input asp-for="MonthlyRent" class="form-control" />
+                                    <span asp-validation-for="MonthlyRent" class="text-danger"></span>
+                                </div>
+                                <div class="row">
+                                    <label asp-for="InventoryItemId" class="control-label">Inventory Item</label>
+                                    <select asp-for="InventoryItemId" class="form-control" asp-items="ViewBag.InventoryItemId"> <option>-- Select Item --</option></select>
+                                </div>
+                                <div class="row">
+                                    <label asp-for="CustomerId" class="control-label">Customer</label>
+                                    <select asp-for="CustomerId" class="form-control" asp-items="ViewBag.CustomerId"> <option>-- Select Customer --</option></select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <a asp-action="Index" class="btn btn-primary btn-sm">Back to List</a>
+                                <input type="submit" value="Create" class="btn btn-success pull-right btn-sm" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

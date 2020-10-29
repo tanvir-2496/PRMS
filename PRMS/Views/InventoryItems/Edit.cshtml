@@ -1,0 +1,55 @@
+﻿@model PRMS.Models.InventoryItem
+
+@{
+    ViewData["Title"] = "Edit";
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="tile">
+            <div class="tile-body">
+                <h4>Edit Inventory Item</h4>
+                <hr />
+                <div class="row">
+                    <div class="col-md-4">
+                        <form asp-action="Edit">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <input type="hidden" asp-for="InventoryItemId" />
+                            <input type="hidden" asp-for="CreatedBy" />
+                            <input type="hidden" asp-for="CreatedDate" />
+                            <input type="hidden" asp-for="UserIp" />
+                            <div class="form-group">
+                                <div class="row">
+                                    <label asp-for="InventoryCategoryId" class="control-label">Category</label>
+                                    <select asp-for="InventoryCategoryId" class="form-control form-control-sm" asp-items="ViewBag.InventoryCategoryId">
+                                        <option>-- Select Category --</option>
+                                    </select>
+                                </div>
+                                <div class="row">
+                                    <label asp-for="ItemName" class="control-label">Item Name</label>
+                                    <input asp-for="ItemName" class="form-control form-control-sm" />
+                                    <span asp-validation-for="ItemName" class="text-danger"></span>
+                                </div>
+                                <div class="row">
+                                    <label asp-for="ItemCode" class="control-label">Item Code</label>
+                                    <input asp-for="ItemCode" class="form-control form-control-sm" />
+                                    <span asp-validation-for="ItemCode" class="text-danger"></span>
+                                </div>
+                                <div class="row">
+                                    <label asp-for="Location" class="control-label"></label>
+                                    <input asp-for="Location" class="form-control form-control-sm" />
+                                    <span asp-validation-for="Location" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <a asp-action="Index" class="btn btn-primary btn-sm">Back to List</a>
+                                <input type="submit" value="Update" class="btn btn-success pull-right btn-sm" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

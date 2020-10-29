@@ -1,0 +1,87 @@
+﻿@model IEnumerable<PRMS.Models.Expance>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="row">
+        <div class="col-md-12">
+            <div class="tile">
+                <div class="tile-body">
+                    <p>
+                        <a asp-action="Create" class="btn btn-primary btn-sm pull-right">Create New</a>
+                    </p>
+                    <table class="table table-hover table-bordered table-responsive-lg" id="sampleTable">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Expance Date
+                                </th>
+                                <th>
+                                    Expance Type
+                                </th>
+                                <th>
+                                    Type Details
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Amount)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Remarks)
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ExpanceDate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ExpanceType)
+                                </td>
+                                <td>
+                                    @{
+                                        if (item.InventoryItemId.HasValue)
+                                        {
+                                            @Html.DisplayFor(modelItem => item.ItemName)
+                                        }
+                                        else if (item.CustomerId.HasValue)
+                                        {
+                                            @Html.DisplayFor(modelItem => item.CustomerName)
+                                        }
+                                        else if (item.MonthYear != null)
+                                        {
+                                            @Html.DisplayFor(modelItem => item.MonthYear)
+                                        }
+                                    }
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Amount)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Remarks)
+                                </td>
+                                <td>
+                                    @{
+                                        long id = @item.ExpanceId;
+                                    }
+                                    @Html.ActionLink("", "Edit", new { id = id }, new { @class = "btn btn-warning fa fa-pencil-square-o" })
+                                    @Html.ActionLink("", "Delete", new { id = id }, new { @class = "btn btn-danger fa fa-trash", onclick = "return confirm('Are you sure you wants to delete this?');" })
+                                </td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#sampleTable').DataTable();
+    });
+</script>

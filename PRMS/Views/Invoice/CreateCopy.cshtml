@@ -1,0 +1,164 @@
+﻿@model PRMS.Models.Invoice
+
+@{
+    ViewData["Title"] = "Create";
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="tile">
+            <div class="tile-body">
+                <h4>Invoice</h4>
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label asp-for="InvoiceDate" class="control-label">Invoice Date (mm/dd/yyyy)</label>
+                            <input asp-for="InvoiceDate" class="form-control" type="date" />
+                            <span asp-validation-for="InvoiceDate" class="text-danger"></span>
+
+                            <label asp-for="CustomerId" class="control-label">Customer</label>
+                            <select asp-for="CustomerId" class="form-control" asp-items="ViewBag.CustomerId">
+                                <option value="0">-- Select Customer --</option>
+                            </select>
+
+                            <label asp-for="InvoiceDetails.ItemId" class="control-label">Item</label>
+                            <select asp-for="InvoiceDetails.ItemId" class="form-control" asp-items="@(new SelectList(string.Empty, "InventoryItemId", "ItemName"))">
+                                <option value="0">-- Select Customer --</option>
+                            </select>
+                            <span asp-validation-for="InvoiceDetails.ItemId" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label asp-for="InvoiceDetails.PaidMonthYear" class="control-label">Paid Month Year</label>
+                            <input asp-for="PaidMonthYear" class="form-control" />
+                            <span asp-validation-for="PaidMonthYear" class="text-danger"></span>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label asp-for="PaidAmount" class="control-label">Paid Amount</label>
+                                    <input asp-for="PaidAmount" class="form-control" type="number" />
+                                    <span asp-validation-for="PaidAmount" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label asp-for="TotalAmount" class="control-label">Total Amount</label>
+                                    <input asp-for="TotalAmount" class="form-control" readonly type="number" />
+                                    <span asp-validation-for="TotalAmount" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label class="control-label">Due Amount</label>
+                                    <input id="DueAmount" class="form-control" readonly type="number" />
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="control-label">Prev. Paid</label>
+                                    <input id="PrevPaid" class="form-control" readonly type="number" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label asp-for="CollectionType" class="control-label">Collection Type</label>
+                            <select asp-for="CollectionType" class="form-control">
+                                @*<option value="0">-- Select Type --</option>*@
+                                <option selected="selected" value="Cash">Cash</option>
+                                <option value="Bank">Bank</option>
+                                <option value="MobileBanking">Mobile Banking</option>
+                                <option value="Others">Others</option>
+                            </select>
+                            <span asp-validation-for="CollectionType" class="text-danger"></span>
+
+                            <br /> <br />
+                            <input type="submit" value="Save" class="btn btn-success pull-right btn-sm" />
+                        </div>
+                    </div>
+
+                </form>
+
+                <div>
+                    <a asp-action="Index">Back to List</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    //Default HTML 5 Date Picker Clear
+    $('input[type="date"]').attr('type', 'text');
+
+    $('#InvoiceDate').datepicker({
+        format: "mm/dd/yyyy",
+        autoclose: true,
+        todayHighlight: true
+    }).datepicker("setDate", 'now');
+
+    $("#PaidMonthYear").datepicker({
+        format: "mm-yyyy",
+        autoclose: true,
+        startView: "year",
+        minViewMode: "months"
+    });
+
+    $('#CollectionType,#CustomerId,#ItemId').select2();
+
+    $(document).ready(function () {
+        var items = "<option value='0'>-- Select Item -- </option>";
+        $('#ItemId').html(items);
+    });
+
+    //Binding Product Item
+    $(document).ready(function () {
+        $('#CustomerId').change(function () {
+            var url = '@Url.Content("~/")' + "Invoice/GetItemByCustomerId";
+            var ddlsource = "#CustomerId";
+            $.getJSON(url, { id: $(ddlsource).val() }, function (data) {
+                var items = '';
+                $('#ItemId').empty();
+                $.each(data, function (i, item) {
+                    items += "<option value='" + item.value + "'>" + item.text + "</option>";
+                });
+                $('#ItemId').html(items);
+                });
+            });
+    });
+
+    //Bind Amount
+    $(document).ready(function () {
+        $('#ItemId').change(function () {
+            var url = '@Url.Content("~/")' + "Invoice/GetAmountDetailsByItemId";
+            var ddlsource = "#ItemId";
+            $.getJSON(url, { id: $(ddlsource).val() }, function (data) {
+                console.log(data);
+                $("#TotalAmount").val(data);
+            });
+        });
+    });
+
+    //Due Amount Set
+    $(document).ready(function () {
+        $("#PaidAmount").change(function () {
+            $("#DueAmount").val();
+            var TotalAmount = $("#TotalAmount").val();
+            var PaidAmount = $("#PaidAmount").val();
+            var PrevPaid = $("#PrevPaid").val();
+            $("#DueAmount").val(TotalAmount - PaidAmount - PrevPaid);
+        });
+    });
+
+    //Previous Amount Set
+    $(document).ready(function () {
+        $("#PaidMonthYear").change(function () {
+            var url = '@Url.Content("~/")' + "Invoice/GetPrevAmountByItemId";
+            var CustomerId = "#CustomerId";
+            var ItemId = "#ItemId";
+            var PaidMonthYear = "#PaidMonthYear";
+            $.getJSON(url, { Customerid: $(CustomerId).val(), ItemId: $(ItemId).val(), MonthYear: $(PaidMonthYear).val() }, function (data) {
+                console.log(data);
+                $("#PrevPaid").val(data);
+            });
+        });
+    });
+
+</script>
